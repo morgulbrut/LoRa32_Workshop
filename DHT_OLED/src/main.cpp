@@ -16,8 +16,8 @@
 #define DHTPIN            13         // Pin which is connected to the DHT sensor.
 
 // Uncomment the type of sensor in use:
-//#define DHTTYPE           DHT11     // DHT 11 
-#define DHTTYPE           DHT22     // DHT 22 (AM2302)
+#define DHTTYPE           DHT11     // DHT 11 
+//#define DHTTYPE           DHT22     // DHT 22 (AM2302)
 //#define DHTTYPE           DHT21     // DHT 21 (AM2301)
 
 // See guide for details on sensor wiring and usage:
@@ -27,8 +27,6 @@ DHT_Unified dht(DHTPIN, DHTTYPE);
 
 uint32_t delayMS;
 
-
-float bla = 0.46; 
 char buffer [8];
 
 U8G2_SSD1306_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 16, /* clock=*/ 15, /* data=*/ 4);   // ESP32 Thing, HW I2C with pin remapping
