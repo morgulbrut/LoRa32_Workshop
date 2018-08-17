@@ -74,28 +74,30 @@ void loop() {
   // Get temperature event and print its value.
   sensors_event_t event;  
   dht.temperature().getEvent(&event);
+  u8g2.drawStr(0, 12, "Temperature");
   if (isnan(event.temperature)) {
     Serial.println("Error reading temperature!");
+    u8g2.drawStr(0, 24, "ERROR");
   }
   else {
     Serial.print("Temperature: ");
     Serial.print(event.temperature);
     Serial.println(" *C");
-    u8g2.drawStr(0, 12, "Temperature");
     u8g2.setCursor(0, 24);
     u8g2.print(event.temperature);
     u8g2.print(" °C");
   }
   // Get humidity event and print its value.
   dht.humidity().getEvent(&event);
+  u8g2.drawStr(0, 36, "Humidity");
   if (isnan(event.relative_humidity)) {
     Serial.println("Error reading humidity!");
+    u8g2.drawStr(0, 48, "ERROR");
   }
   else {
     Serial.print("Humidity: ");
     Serial.print(event.relative_humidity);
     Serial.println("%");
-    u8g2.drawStr(0, 36, "Humidity");
     u8g2.setCursor(0, 48);
     u8g2.print(event.relative_humidity);
     u8g2.print(" %");
