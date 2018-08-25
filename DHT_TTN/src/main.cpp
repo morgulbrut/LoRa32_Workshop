@@ -56,7 +56,7 @@ static osjob_t sendjob;
 
 // Schedule TX every this many seconds (might become longer due to duty
 // cycle limitations).
-const unsigned TX_INTERVAL = 60;
+const unsigned TX_INTERVAL = 900;
 
 // Pin mapping
 const lmic_pinmap lmic_pins = {
@@ -125,15 +125,15 @@ void onEvent (ev_t ev) {
     switch(ev) {
         case EV_SCAN_TIMEOUT:
             Serial.println(F("EV_SCAN_TIMEOUT"));
-            u8g2.print("EV_SCAN_TIMEOUT");
+            u8g2.print("EV_SCAN_TIMEOUT  ");
             break;
         case EV_BEACON_FOUND:
             Serial.println(F("EV_BEACON_FOUND"));
-            u8g2.print("EV_BEACON_FOUND");
+            u8g2.print("EV_BEACON_FOUND  ");
             break;
         case EV_BEACON_MISSED:
             Serial.println(F("EV_BEACON_MISSED"));
-            u8g2.print("EV_BEACON_MISSED");
+            u8g2.print("EV_BEACON_MISSED ");
             break;
         case EV_BEACON_TRACKED:
             Serial.println(F("EV_BEACON_TRACKED"));
@@ -141,11 +141,11 @@ void onEvent (ev_t ev) {
             break;
         case EV_JOINING:
             Serial.println(F("EV_JOINING"));
-            u8g2.print("EV_JOINING");
+            u8g2.print("EV_JOINING       ");
             break;
         case EV_JOINED:
             Serial.println(F("EV_JOINED"));
-            u8g2.print("EV_JOINED");
+            u8g2.print("EV_JOINED        ");
 
             // Disable link check validation (automatically enabled
             // during join, but not supported by TTN at this time).
@@ -153,19 +153,19 @@ void onEvent (ev_t ev) {
             break;
         case EV_RFU1:
             Serial.println(F("EV_RFU1"));
-            u8g2.print("EV_RFU1");
+            u8g2.print("EV_RFU1         ");
             break;
         case EV_JOIN_FAILED:
             Serial.println(F("EV_JOIN_FAILED"));
-            u8g2.print("EV_JOIN_FAILED");
+            u8g2.print("EV_JOIN_FAILED  ");
             break;
         case EV_REJOIN_FAILED:
             Serial.println(F("EV_REJOIN_FAILED"));
-            u8g2.print("EV_REJOIN_FAILED");
+            u8g2.print("EV_REJOIN_FAILED ");
             break;
         case EV_TXCOMPLETE:
             Serial.println(F("EV_TXCOMPLETE (includes waiting for RX windows)"));
-            u8g2.print("EV_TXCOMPLETE");
+            u8g2.print("EV_TXCOMPLETE   ");
             if (LMIC.txrxFlags & TXRX_ACK)
               Serial.println(F("Received ack"));
             if (LMIC.dataLen) {
@@ -178,33 +178,32 @@ void onEvent (ev_t ev) {
             break;
         case EV_LOST_TSYNC:
             Serial.println(F("EV_LOST_TSYNC"));
-            u8g2.print("EV_LOST_TSYNC");
+            u8g2.print("EV_LOST_TSYNC   ");
             break;
         case EV_RESET:
             Serial.println(F("EV_RESET"));
-            u8g2.print("EV_RESET");
+            u8g2.print("EV_RESET        ");
             break;
         case EV_RXCOMPLETE:
             // data received in ping slot
             Serial.println(F("EV_RXCOMPLETE"));
-            u8g2.print("EV_RXCOMPLETE");
+            u8g2.print("EV_RXCOMPLETE  ");
             break;
         case EV_LINK_DEAD:
             Serial.println(F("EV_LINK_DEAD"));
-            u8g2.print("EV_LINK_DEAD");
+            u8g2.print("EV_LINK_DEAD   ");
             break;
         case EV_LINK_ALIVE:
             Serial.println(F("EV_LINK_ALIVE"));
-            u8g2.print("EV_LINK_ALIVE");
+            u8g2.print("EV_LINK_ALIVE  ");
             break;
          default:
             Serial.println(F("Unknown event"));
-            u8g2.print("Unknown event");
+            u8g2.print("Unknown event  ");
             break;
     }
     u8g2.sendBuffer();
 }
-
 
 void setup() {
     Serial.begin(9600);
@@ -225,5 +224,5 @@ void setup() {
 }
 
 void loop() {
-  os_runloop_once();
+    os_runloop_once();
 }
