@@ -30,3 +30,13 @@
 *.exe
 *.out
 *.app
+
+DHT/\.vscode/settings\.json
+
+DHT_OLED/\.vscode/settings\.json
+
+DHT_TTN/\.vscode/settings\.json
+
+Hello_TTN/\.vscode/settings\.json
+
+Workshop\.code-workspace
