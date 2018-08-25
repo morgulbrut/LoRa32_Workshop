@@ -45,12 +45,13 @@ void os_getArtEui (u1_t* buf) { memcpy_P(buf, APPEUI, 8);}
 static const u1_t PROGMEM DEVEUI[8]={ 0x06, 0x41, 0xB9, 0x78, 0x7B, 0xE4, 0x16, 0x00 };
 void os_getDevEui (u1_t* buf) { memcpy_P(buf, DEVEUI, 8);}
 
-// This key should be in big endian format. 
+// This key should be in big endian format (or, since it is not really a
+// number but a block of memory, endianness does not really apply). In
+// practice, a key taken from ttnctl can be copied as-is.
 // The key shown here is the semtech default key.
 static const u1_t PROGMEM APPKEY[16] = { 0x29, 0x9D, 0x16, 0xCC, 0x3E, 0xE8, 0xA5, 0x58, 0xE8, 0x33, 0x71, 0xBC, 0xC3, 0x03, 0x1D, 0xEC };
 void os_getDevKey (u1_t* buf) {  memcpy_P(buf, APPKEY, 16);}
 
-static uint8_t mydata[15] = "";
 static osjob_t sendjob;
 
 // Schedule TX every this many seconds (might become longer due to duty
@@ -66,12 +67,51 @@ const lmic_pinmap lmic_pins = {
 };
 
 void do_send(osjob_t* j){
+    // get data from sensor
+    lpp.reset();
+  // Get temperature event and print its value.
+  sensors_event_t event;  
+  dht.temperature().getEvent(&event);
+  if (isnan(event.temperature)) {
+    Serial.println("Error reading temperature!");
+  }
+  else {
+    Serial.print("Temperature: ");
+    float temp = event.temperature;
+    Serial.print(temp);
+    Serial.println(" *C");
+    u8g2.drawStr(0, 12, "Temperature");
+    u8g2.setCursor(0, 24);
+    u8g2.print(temp);
+    u8g2.print(" °C");
+    lpp.addTemperature(1,temp);
+  }
+  // Get humidity event and print its value.
+  dht.humidity().getEvent(&event);
+  if (isnan(event.relative_humidity)) {
+    Serial.println("Error reading humidity!");
+  }
+  else {
+    Serial.print("Humidity: ");
+    float hum = event.relative_humidity;
+    Serial.print(hum);
+    Serial.println("%");
+    u8g2.drawStr(0, 36, "Humidity");
+    u8g2.setCursor(0, 48);
+    u8g2.print(hum);
+    u8g2.print(" %");
+    lpp.addRelativeHumidity(2,hum);
+  }
+    u8g2.sendBuffer();
+
+
+
     // Check if there is not a current TX/RX job running
     if (LMIC.opmode & OP_TXRXPEND) {
         Serial.println(F("OP_TXRXPEND, not sending"));
     } else {
         // Prepare upstream data transmission at the next possible time.
-        LMIC_setTxData2(1, mydata, sizeof(mydata)-1, 0);
+        LMIC_setTxData2(1, lpp.getBuffer(), lpp.getSize(), 0);
         Serial.println(F("Packet queued"));
     }
     // Next TX is scheduled after TX_COMPLETE event.
@@ -185,41 +225,5 @@ void setup() {
 }
 
 void loop() {
-    lpp.reset();
-    u8g2.clearBuffer();
-  // Get temperature event and print its value.
-  sensors_event_t event;  
-  dht.temperature().getEvent(&event);
-  if (isnan(event.temperature)) {
-    Serial.println("Error reading temperature!");
-  }
-  else {
-    Serial.print("Temperature: ");
-    Serial.print(event.temperature);
-    Serial.println(" *C");
-    u8g2.drawStr(0, 12, "Temperature");
-    u8g2.setCursor(0, 24);
-    u8g2.print(event.temperature);
-    u8g2.print(" °C");
-    lpp.addTemperature(1,event.temperature);
-  }
-  // Get humidity event and print its value.
-  dht.humidity().getEvent(&event);
-  if (isnan(event.relative_humidity)) {
-    Serial.println("Error reading humidity!");
-  }
-  else {
-    Serial.print("Humidity: ");
-    Serial.print(event.relative_humidity);
-    Serial.println("%");
-    u8g2.drawStr(0, 36, "Humidity");
-    u8g2.setCursor(0, 48);
-    u8g2.print(event.relative_humidity);
-    u8g2.print(" %");
-    lpp.addRelativeHumidity(3, event.relative_humidity);
-  }
-    delay(10000);
-    u8g2.sendBuffer();
-
   os_runloop_once();
 }
