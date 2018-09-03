@@ -10,3 +10,11 @@
 * µ-Collector by night
 
 ---
+
+### Hardware
+
+* Breakout board für Heltec LoRa32
+* Open Hardware
+* Alpha Version, mit noch 1-2 Bugs
+
+---
