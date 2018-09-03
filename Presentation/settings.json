@@ -1,0 +1,32 @@
+{
+    "replacements": {},
+    "variables": [
+        "lang=de-CH",
+        "papersize=A4",
+        "fontsize=10pt",
+        "documentclass=scrartcl",
+        "mainfont=Linux Libertine O",
+        "mainfontoptions=Numbers=OldStyle",
+        "mainfontoptions=Ligatures=Discretionary",
+        "sansfont=Linux Biolinum",
+        "sansfontoptions=Numbers=OldStyle",
+        "urlcolor=blue"
+    ],
+    "extensions": [
+        "yaml_metadata_block"
+    ],
+    "options": {
+        "numbered_headings": "True",
+        "toc": "True",
+        "lof": "False",
+        "lot": "False",
+        "verbose": "False"
+    },
+    "loglevel": "INFO",
+    "files": [
+        {
+            "in_file": "presentation.md",
+            "out_file": "presentation.revealjs"
+        }
+    ]
+}
